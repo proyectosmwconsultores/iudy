@@ -1,0 +1,2 @@
+[23-May-2026 22:22:22 America/Mexico_City] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/wwsciu/public_html/repositorio/system.php on line 5
+[23-May-2026 22:22:22 America/Mexico_City] PHP Warning:  mysqli::query(): Couldn't fetch Conexion in /home/wwsciu/public_html/repositorio/system.php on line 6

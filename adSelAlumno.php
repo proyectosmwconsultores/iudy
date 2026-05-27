@@ -1,0 +1,165 @@
+<?php $valor = 3; $section = "Lista de alumnos"; include("head.php");
+if($_SESSION['IdUsua']){ $addIngresos=$t->add_ingresos($_SESSION['IdUsua'],'Está visualizado la lista de los alumnos'); }
+if(isset($_POST["txtClaveGrp"])){ $_POST["txtClaveGrp"] = $_POST["txtClaveGrp"]; } else { $_POST["txtClaveGrp"] = '';}
+if(isset($_POST["txtCampus"])){ $_POST["txtCampus"] = $_POST["txtCampus"]; } else { $_POST["txtCampus"] = '';}
+$alumnos=$t->get_alumnosT($_POST["txtClaveGrp"]);
+$lstCampus=$t->get_campusPermiso($_SESSION['IdUsua']);
+
+$clvGrupo=$t->get_claveGCa($_POST["txtCampus"]);
+
+$bytesCodificados = base64_encode(file_get_contents("assets/images/campus/logo_campus.png"));
+?>
+<link rel="stylesheet" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+<link href="assets/table/css/animate.css" rel="stylesheet">
+<link href="assets/table/css/style.css" rel="stylesheet">
+
+<body class="hold-transition skin-<?php echo $configuracion[15]["Descripcion"]; ?> sidebar-mini fixed">
+	<div class="wrapper">
+		<?php include("menuV.php"); ?>
+		<div class="content-wrapper">
+			<section class="content-header">
+				<h1>
+					Lista de alumnos por grupo
+				</h1>
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-user"></i> Alumnos</a></li>
+					<li class="active">Muestra todos los alumnos</li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<form name="frm" id="frm" action="adSelAlumno.php" method="POST" enctype="multipart/form-data">
+						<input id="Universidad" name="Universidad" value="<?php echo $configuracion[1]["Descripcion"]; ?>" type="hidden"/>
+						<input id="Logo" name="Logo" value="<?php echo $bytesCodificados; ?>" type="hidden"/>
+						<input id="Numero" name="Numero" value="1" type="hidden"/>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Campus:</label>
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-fw fa-key"></i>
+									</div>
+									<select class="form-control" name="txtCampus" id="txtCampus" onchange="document.frm.submit();">
+										<option value=""> - Seleccione - </option>
+										<?php for ($i=0;$i< sizeof($lstCampus);$i++) { ?>
+												<option value="<?php echo $lstCampus[$i]["IdCampus"]; ?>"<?php if($_POST['txtCampus']==$lstCampus[$i]["IdCampus"]){?>selected="selected"<?php }?>><?php echo $lstCampus[$i]["Campus"]; ?></option>
+												<?php } ?>
+									</select>
+
+
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Grupo:</label>
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-fw fa-key"></i>
+									</div>
+									<select class="form-control" name="txtClaveGrp" id="txtClaveGrp" onchange="document.frm.submit();">
+										<option value=""> - Seleccione - </option>
+										<?php for ($i=0;$i< sizeof($clvGrupo);$i++) { $tx = 0;
+												$busActivoD=$t->get_busActOfer($clvGrupo[$i]["IdGrupo"],$_SESSION["IdUsua"],$clvGrupo[$i]["IdCampus"]);
+												 $tx = $busActivoD[0][0];
+												if($tx){
+												?>
+												<option value="<?php echo $clvGrupo[$i]["IdGrupo"]; ?>"<?php if($_POST['txtClaveGrp']==$clvGrupo[$i]["IdGrupo"]){?>selected="selected"<?php }?>><?php echo $clvGrupo[$i]["Grado"].'° '.$clvGrupo[$i]["CveGrupo"]; ?></option>
+												<?php
+												} } ?>
+									</select>
+
+
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<div class="box">
+								<div class="box-header">
+									<h3 class="box-title">Lista de todos los alumnos</h3>
+								</div>
+								<div class="box-body">
+								<div class="table-responsive">
+									<table id="example" class="table table-striped table-bordered table-hover dataTables-example" style="font-size: 12px;" >
+										<thead>
+											<tr>
+												<th>Matricula</th>
+												<th>Nombre</th>
+												<th>Celular</th>
+												<th>Correo</th>
+												<th>Sexo</th>
+												<th>Estatus</th>
+												<th>Oferta educativa</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php for ($i=0;$i< sizeof($alumnos);$i++) { ?>
+											<tr>
+												<td><?php echo $alumnos[$i]["Matricula"]; ?></td>
+												<td><?php echo $alumnos[$i]["APaterno"].' '.$alumnos[$i]["AMaterno"].' '.$alumnos[$i]["Nombre"]; ?></td>
+												<td><?php echo $alumnos[$i]["Celular"]; ?></td>
+												<td><?php echo $alumnos[$i]["Correo"]; ?></td>
+												<td><?php echo $alumnos[$i]["Sexo"]; ?></td>
+												<td><?php echo $alumnos[$i]["Estatus"]; ?></td>
+												<td><?php echo $alumnos[$i]["NomEducativa"]; ?></td>
+											</tr>
+											<?php } ?>
+										</tfoot>
+									</table>
+								</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</section>
+		</div>
+		<!-- jQuery 3 -->
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<!-- Bootstrap 3.3.7 -->
+		<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<!-- Select2 -->
+		<!-- <script src="bower_components/select2/dist/js/select2.full.min.js"></script> -->
+		<!-- Mainly scripts -->
+    <script src="assets/table/js/jquery-3.1.1.min.js"></script>
+    <script src="assets/table/js/bootstrap.min.js"></script>
+    <script src="assets/table/js/plugins/dataTables/datatables.min.js"></script>
+    <!-- Custom and plugin javascript -->
+		<script src="assets/table/js/scriptAgregado1.js"></script>
+
+		<!-- SlimScroll
+		<script src="bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+		<!-- iCheck 1.0.1
+		<script src="bower_components/plugins/iCheck/icheck.min.js"></script>
+		<!-- FastClick
+		<script src="bower_components/fastclick/lib/fastclick.js"></script>
+		<!-- AdminLTE App -->
+		<script src="dist/js/adminlte.min.js"></script>
+		<!-- AdminLTE for demo purposes -->
+		<script src="dist/js/demo.js"></script>
+
+		<!-- DataTables -->
+		<!-- <script src="bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+		<script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script> -->
+
+
+	  <?php include("footer.php"); ?>
+	</div>
+
+<!-- jQuery 3 -->
+
+
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<!-- Page script -->
+<script>
+
+	// $(function () {
+	// 	$('.select2').select2()
+	//
+	// })
+</script>
+</body>
+</html>

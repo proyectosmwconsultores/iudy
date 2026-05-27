@@ -1,0 +1,34 @@
+# Ignorar archivos por extensión en /assets/docs
+
+/php/clases/class.System.php
+/assets/docs/**/*.pdf
+/assets/docs/**/*.docx
+/assets/docs/**/*.xlsx
+/assets/docs/**/*.pptx
+/assets/docs/**/*.png
+/assets/docs/**/*.jpg
+/assets/docs/**/*.jpeg
+/assets/docs/**/*.gif
+!/assets/docs/**/index.php
+
+# Ignorar archivos por extensión en /assets/biblioteca
+/assets/biblioteca/**/*.pdf
+/assets/biblioteca/**/*.docx
+/assets/biblioteca/**/*.xlsx
+/assets/biblioteca/**/*.pptx
+/assets/biblioteca/**/*.png
+/assets/biblioteca/**/*.jpg
+/assets/biblioteca/**/*.jpeg
+/assets/biblioteca/**/*.gif
+!/assets/biblioteca/**/index.php
+
+# Ignorar archivos por extensión en /assets/trabajos
+/assets/trabajos/**/*.pdf
+/assets/trabajos/**/*.docx
+/assets/trabajos/**/*.xlsx
+/assets/trabajos/**/*.pptx
+/assets/trabajos/**/*.png
+/assets/trabajos/**/*.jpg
+/assets/trabajos/**/*.jpeg
+/assets/trabajos/**/*.gif
+!/assets/trabajos/**/index.php
