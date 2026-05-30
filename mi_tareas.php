@@ -9,21 +9,12 @@ $materia = $t->get_datosModuloD($_GET['idAsignacion']);
 $lst_tareas = $contenido->get_lst_tareas($_GET['idAsignacion']);
 $lst_prom = $contenido->get_lst_prom_id($_GET['idAsignacion'], $_SESSION['IdUsua']);
 $IdUsua = $_SESSION['IdUsua'];
-$prom = 6;
+
+$prom_minimo=$t->get_promedio_minimo($materia[0]["IdEducativa"]);
+$prom = $prom_minimo[0]['Promedio'];
+
 $grad = $materia[0]["IdGrado"];
-//$prom = 6;
-//$grad = $datP[0]["IdGrado"];
-if ($grad == 1) {
-  $prom = 7;
-} elseif ($grad == 2) {
-  $prom = 7;
-} elseif ($grad == 3) {
-  $prom = 6;
-} elseif ($grad == 4) {
-  $prom = 6;
-} elseif ($grad == 7) {
-  $prom = 6;
-}
+
 
 
 ?>
