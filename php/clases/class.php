@@ -15472,38 +15472,37 @@ ORDER BY tblp_foliospago.FecCap DESC
     $sql9 = $db->query("SELECT * FROM tblc_datosfactura WHERE tblc_datosfactura.IdEstatus = '8' AND tblc_datosfactura.IdUsua =  '$IdUsua'");
     $db->rows($sql9);
     $datos91 = $db->recorrer($sql9);
-    
+    $get_factura_pend_id = [];
 
     if(isset($datos91["IdDatosFacturacion"])){
-
-    $get_factura_pend_id = [];
     $sql = $db->query("SELECT
-tblp_foliospago.NoFolio,
-tblp_foliospago.FecCap,
-tblp_foliospago.FecPago,
-tblp_foliospago.IdPago,
-tblp_foliospago.IdEstatus,
-tblp_foliospago.Factura,
-tblp_foliospago.IdUsua,
-Sum(tblp_foliospago.Monto) AS Monto,
-tblp_foliospago.IdForma,
-tblc_formapago.Descripcion,
-tblc_formapago.c_FormaPago,
-tblp_pagos.DocFactura
-FROM
-tblp_foliospago
-Left Join tblc_formapago ON tblc_formapago.IdFormaPago = tblp_foliospago.IdForma
-Left Join tblp_pagos ON tblp_pagos.IdPago = tblp_foliospago.IdPago
-WHERE
-tblp_foliospago.IdUsua =  '$IdUsua' AND tblp_foliospago.Factura = '1' AND tblp_foliospago.AnioMes = '$anio'
-GROUP BY
-tblp_foliospago.NoFolio
- ");
+      tblp_foliospago.NoFolio,
+      tblp_foliospago.FecCap,
+      tblp_foliospago.FecPago,
+      tblp_foliospago.IdPago,
+      tblp_foliospago.IdEstatus,
+      tblp_foliospago.Factura,
+      tblp_foliospago.IdUsua,
+      Sum(tblp_foliospago.Monto) AS Monto,
+      tblp_foliospago.IdForma,
+      tblc_formapago.Descripcion,
+      tblc_formapago.c_FormaPago,
+      tblp_pagos.DocFactura
+      FROM
+      tblp_foliospago
+      Left Join tblc_formapago ON tblc_formapago.IdFormaPago = tblp_foliospago.IdForma
+      Left Join tblp_pagos ON tblp_pagos.IdPago = tblp_foliospago.IdPago
+      WHERE
+      tblp_foliospago.IdUsua =  '$IdUsua' AND tblp_foliospago.Factura = '1' AND tblp_foliospago.AnioMes = '$anio'
+      GROUP BY
+      tblp_foliospago.NoFolio
+      ");
     while ($x = $db->recorrer($sql)) {
       $get_factura_pend_id[] = $x;
     }
-    return $get_factura_pend_id;
+    
   } 
+  return $get_factura_pend_id;
 
   }
 

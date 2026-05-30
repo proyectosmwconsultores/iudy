@@ -12,7 +12,7 @@ if (isset($_GET["token"])) {
 	$alumno = $t->get_datAlumno($id);
 	$beca = $t->get_datBeca($id);
 	$pagPend = $t->get_pagPendientes($id); 
-	$_beca = $t->get_configurar_beca($id);
+	// $_beca = $t->get_configurar_beca($id);
 	$pendIns = $espacio->get_proceso_inscripcion_id($id);
 	$pagApro = $t->get_pagAprobados($id);
 	$fac_pend = $t->get_factura_pend_id($id);
