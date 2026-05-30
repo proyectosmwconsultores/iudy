@@ -9531,36 +9531,33 @@ tblc_usuario.IdGrupo
       $sql_par1 = $db->query("SELECT tblp_parcialdocente.IdParcialDocente FROM tblp_parcialdocente WHERE tblp_parcialdocente.IdAsignacion = '$IdAsignacion' AND tblp_parcialdocente.NoParcial = '1' ");
       $db->rows($sql_par1);
       $_par1 = $db->recorrer($sql_par1);
-      $_idPar1 = $_par1["IdParcialDocente"];
-
-      if (!$_idPar1) {
+      
+      if (!isset($_par1["IdParcialDocente"])) {
         $insertar = $db->query("INSERT INTO tblp_parcialdocente (IdOferta, IdModulo, Titulo, NoParcial, FecCap, IdUsua, IdEstatus, IdGrupo, IdCiclo, IdAsignacion, Tipo, FecIni, FecFin) VALUES('" . $datos2['IdEducativa'] . "','" . $datos2['IdModulo'] . "','Parcial 1','1',NOW(),'" . $datos2['IdUsua'] . "','4','" . $datos2['IdGrupo'] . "','" . $datos2['IdCiclo'] . "','$IdAsignacion','P','" . $datos2['FecIni'] . "','" . $datos2['FecFin'] . "')");
       }
 
       $sql_par2 = $db->query("SELECT tblp_parcialdocente.IdParcialDocente FROM tblp_parcialdocente WHERE tblp_parcialdocente.IdAsignacion = '$IdAsignacion' AND tblp_parcialdocente.NoParcial = '2' ");
       $db->rows($sql_par2);
       $_par2 = $db->recorrer($sql_par2);
-      $_idPar2 = $_par2["IdParcialDocente"];
+      
 
-      if (!$_idPar2) {
+      if (!isset($_par2["IdParcialDocente"])) {
         $insertar = $db->query("INSERT INTO tblp_parcialdocente (IdOferta, IdModulo, Titulo, NoParcial, FecCap, IdUsua, IdEstatus, IdGrupo, IdCiclo, IdAsignacion, Tipo, FecIni, FecFin) VALUES('" . $datos2['IdEducativa'] . "','" . $datos2['IdModulo'] . "','Parcial 2','2',NOW(),'" . $datos2['IdUsua'] . "','4','" . $datos2['IdGrupo'] . "','" . $datos2['IdCiclo'] . "','$IdAsignacion','P','" . $datos2['FecIni'] . "','" . $datos2['FecFin'] . "')");
       }
 
       $sql_par3 = $db->query("SELECT tblp_parcialdocente.IdParcialDocente FROM tblp_parcialdocente WHERE tblp_parcialdocente.IdAsignacion = '$IdAsignacion' AND tblp_parcialdocente.NoParcial = '3' ");
       $db->rows($sql_par3);
       $_par3 = $db->recorrer($sql_par3);
-      $_idPar3 = $_par3["IdParcialDocente"];
 
-      if (!$_idPar3) {
+      if (!isset($_par3["IdParcialDocente"])) {
         $insertar = $db->query("INSERT INTO tblp_parcialdocente (IdOferta, IdModulo, Titulo, NoParcial, FecCap, IdUsua, IdEstatus, IdGrupo, IdCiclo, IdAsignacion, Tipo, FecIni, FecFin) VALUES('" . $datos2['IdEducativa'] . "','" . $datos2['IdModulo'] . "','Evaluación final','3',NOW(),'" . $datos2['IdUsua'] . "','4','" . $datos2['IdGrupo'] . "','" . $datos2['IdCiclo'] . "','$IdAsignacion','P','" . $datos2['FecIni'] . "','" . $datos2['FecFin'] . "')");
       }
     } else {
       $sql_par = $db->query("SELECT tblp_parcialdocente.IdParcialDocente FROM tblp_parcialdocente WHERE tblp_parcialdocente.IdAsignacion = '$IdAsignacion' AND tblp_parcialdocente.NoParcial = '1' ");
       $db->rows($sql_par);
       $_par = $db->recorrer($sql_par);
-      $_idPar = $_par["IdParcialDocente"];
 
-      if (!$_idPar) {
+      if (!isset($_par["IdParcialDocente"])) {
         $insertar = $db->query("INSERT INTO tblp_parcialdocente (IdOferta, IdModulo, Titulo, NoParcial, FecCap, IdUsua, IdEstatus, IdGrupo, IdCiclo, IdAsignacion, Tipo, FecIni, FecFin) VALUES('" . $datos2['IdEducativa'] . "','" . $datos2['IdModulo'] . "','Parcial 1','1',NOW(),'" . $datos2['IdUsua'] . "','4','" . $datos2['IdGrupo'] . "','" . $datos2['IdCiclo'] . "','$IdAsignacion','P','" . $datos2['FecIni'] . "','" . $datos2['FecFin'] . "')");
       }
     }
@@ -10847,6 +10844,17 @@ WHERE tblh_temusers.IdUsua = '$IdUsua'");
       $gprospectoId[] = $x;
     }
     return $gprospectoId;
+  }
+
+  public function get_promedio_minimo($IdEducativa)
+  {
+    $db = new Conexion();
+    $get_promedio_minimo = [];
+    $sql = $db->query("SELECT tblp_educativa.IdEducativa, tblc_grado.Promedio FROM tblp_educativa LEFT JOIN tblc_grado ON tblp_educativa.IdGrado = tblc_grado.IdGrado WHERE tblp_educativa.IdEducativa = '$IdEducativa'");
+    while ($x = $db->recorrer($sql)) {
+      $get_promedio_minimo[] = $x;
+    }
+    return $get_promedio_minimo;
   }
 
   # OBTENER UN SOLO USUARIO ADMINISTRADOR

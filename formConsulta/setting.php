@@ -3196,6 +3196,19 @@ if ($tipoGuardar == "cargarCali") {
   $db->rows($sql_asig);
   $_asig = $db->recorrer($sql_asig);
   $IdCiclo = $_asig["IdCiclo"];
+  $IdEducativa = $_asig["IdEducativa"];
+
+  $sql_prome = $db->query("SELECT tblp_educativa.IdEducativa, tblc_grado.Promedio FROM tblp_educativa LEFT JOIN tblc_grado ON tblp_educativa.IdGrado = tblc_grado.IdGrado WHERE tblp_educativa.IdEducativa = '$IdEducativa' ");
+  $db->rows($sql_prome);
+  $_promedio = $db->recorrer($sql_prome);
+  $PromedioMinimo = $_promedio["Promedio"];
+
+  if (($IdEducativa == 33) || ($IdEducativa == 47)) {
+    $noParcialEspecial = 3;
+  } else {
+    $noParcialEspecial = 1;
+  }
+
 
   $sql = $db->query("SELECT * FROM tblp_moduloalumno WHERE tblp_moduloalumno.IdAsignacion = '$IdAsignacion'");
   while ($x = $db->recorrer($sql)) {
@@ -3238,8 +3251,18 @@ if ($tipoGuardar == "cargarCali") {
 
       $prom_entero = round($prom);
 
-      $insertar = $db->query("UPDATE tblp_calificacion SET tblp_calificacion.P$NoParcial = '$prom_entero' WHERE tblp_calificacion.IdCalificacion = '$IdCal'");
-      $insertar = $db->query("UPDATE tblp_moduloalumno SET tblp_moduloalumno.ParcialF$NoParcial = '$prom_entero', tblp_moduloalumno.Parcial$NoParcial = '$prom' WHERE tblp_moduloalumno.IdModuloAlumno = '$IdModAlum'");
+      if($noParcialEspecial == 1){
+        if($prom < $PromedioMinimo){
+          $prom_entero = 5;
+        }
+        $insertar = $db->query("UPDATE tblp_calificacion SET tblp_calificacion.P$NoParcial = '$prom_entero' WHERE tblp_calificacion.IdCalificacion = '$IdCal'");
+        $insertar = $db->query("UPDATE tblp_moduloalumno SET tblp_moduloalumno.ParcialF$NoParcial = '$prom_entero', tblp_moduloalumno.Parcial$NoParcial = '$prom' WHERE tblp_moduloalumno.IdModuloAlumno = '$IdModAlum'");
+      } else {
+        $insertar = $db->query("UPDATE tblp_calificacion SET tblp_calificacion.P$NoParcial = '$prom_entero' WHERE tblp_calificacion.IdCalificacion = '$IdCal'");
+        $insertar = $db->query("UPDATE tblp_moduloalumno SET tblp_moduloalumno.ParcialF$NoParcial = '$prom_entero', tblp_moduloalumno.Parcial$NoParcial = '$prom' WHERE tblp_moduloalumno.IdModuloAlumno = '$IdModAlum'");
+      }
+
+      
 
 
       
@@ -3342,7 +3365,7 @@ if ($tipoGuardar == "cargarCali") {
         $promx = round($px, 0);
         $px = round($px, 2);
       }
-      if (($promx > 0) && $promx < 5) {
+      if (($promx > 0) && $promx < $PromedioMinimo) {
         $promx = 5;
         $px = 5;
       }
@@ -3376,7 +3399,7 @@ if ($tipoGuardar == "cargarCali") {
         $promx = '0';
         $px = '0';
       } 
-      if (($promx > 0) && $promx < 5) {
+      if (($promx > 0) && $promx < $PromedioMinimo) {
         $promx = 5;
         $px = 5;
       }

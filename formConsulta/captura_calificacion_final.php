@@ -9,6 +9,10 @@
   $pa_create=$t->get_parcial_cal($IdAsignacion);
   $datP=$t->get_ofertaId($actaCalificacion[0]["IdEducativa"]);
   $usx=$t->get_usuarioId($_SESSION['IdUsua']);
+
+  $prom_minimo=$t->get_promedio_minimo($actaCalificacion[0]["IdEducativa"]);
+  $prom = $prom_minimo[0]['Promedio'];
+
   $_tix = $emision[0]['Modalidad'];
   $_f = 0;
   if($usx[0]['id_paquete']){
@@ -22,19 +26,8 @@
   }
 
   $_ex = 0;
-  $prom = 6;
+  
   $grad = $datP[0]["IdGrado"];
-  if($grad == 1){
-  	$prom = 7;
-  } elseif($grad == 2){
-  	$prom = 7;
-  } elseif($grad == 3){
-    $prom = 6;
-  } elseif($grad == 4){
-    $prom = 6;
-  } elseif($grad == 7){
-    $prom = 6;
-  }
 
   $cP = 0; $cB1 = 0; $cB2 = 0; $cB3 = 0;
   if($emision[0]['Fecha_impresion']){ $cP = 1;   $cB1 = 1;}
@@ -56,6 +49,8 @@
   }
 ?>
   <input id="Grado" name="Grado" value="<?php echo $datP[0]["IdGrado"]; ?>" type="hidden"/>
+  <input id="promedioMinimo" name="promedioMinimo" value="<?php echo $prom; ?>" type="hidden"/>
+  <input id="_idOferta" name="_idOferta" value="<?php echo $actaCalificacion[0]["IdEducativa"]; ?>" type="hidden"/>
 
   <div class="box-header">
     <h3 class="box-title"><i class="fa fa-fw fa-file-text-o"></i> Captura de calificación final</h3>
@@ -331,6 +326,8 @@ function savCalificacion(IdModuloAlumno,IdUsua,Parcial,IdAdmin){
   var IdModA = document.getElementById(ModAlum).value;
   var Calif = document.getElementById(CalAlum).value;
   var IdAsignacion = document.getElementById("IdAsignacion").value;
+  var promedioMinimo = document.getElementById("promedioMinimo").value;
+  var IdOferta = document.getElementById("_idOferta").value;
   var TipoGuardar = "sav_cal_udech"; 
 
   if (Calif==''){
@@ -340,13 +337,36 @@ function savCalificacion(IdModuloAlumno,IdUsua,Parcial,IdAdmin){
       return 0;
   }
 
-  if ((Calif == 5) || (Calif == 6) || (Calif == 7) || (Calif == 8) || (Calif == 9) || (Calif == 10)){
-    } else {
-      swal("Error al guardar", "El promedio final debe de ser un numero entero. \n Ejemplo: 5, 6, 7, 8, 9, 10", "error");
-        document.getElementById(CalAlum).focus();
-        cargar_calificacionx(IdAsignacion);
-        return 0;
+  if ((IdOferta == 33) || (IdOferta == 47)) {
+    var noParcial = 3;
+  } else {
+    var noParcial = 1;
+  }
+
+  if(noParcial == 1){
+    if(promedioMinimo == 8){
+      if ((Calif == 5) || (Calif == 8) || (Calif == 9) || (Calif == 10)){
+      } else {
+        swal("Error al guardar", "El promedio final debe de ser un numero entero. \n Ejemplo: 5, 8, 9, 10", "error");
+          document.getElementById(CalAlum).focus();
+          cargar_calificacionx(IdAsignacion);
+          return 0;
+      }
     }
+  } else {
+    if ((Calif == 5) || (Calif == 6) || (Calif == 7) || (Calif == 8) || (Calif == 9) || (Calif == 10)){
+      } else {
+        swal("Error al guardar", "El promedio final debe de ser un numero entero. \n Ejemplo: 5, 6, 7, 8, 9, 10", "error");
+          document.getElementById(CalAlum).focus();
+          cargar_calificacionx(IdAsignacion);
+          return 0;
+      }
+  }
+
+
+
+
+
 
   $.ajax({
         url:"formConsulta/setting.php",
