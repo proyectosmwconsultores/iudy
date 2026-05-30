@@ -303,7 +303,7 @@ if (isset($_GET["token"])) {
 				<div class="modal-content">
 					<div class="modal-header" style="background: <?php echo $configuracion[34]['Descripcion']; ?>; color: <?php echo $configuracion[35]['Descripcion']; ?>; font-size: 16px;">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title"><i class="fa fa-fw fa-briefcase"></i> Configurar horario personalizado</h4>
+						<h4 class="modal-title"><i class="fa fa-fw fa-briefcase"></i> Configurar inscripción académica </h4>
 					</div>
 					<div class="modal-body" id="employee_detail_per">
 					</div>

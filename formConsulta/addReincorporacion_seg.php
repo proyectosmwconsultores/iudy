@@ -1,6 +1,7 @@
 <?php
 session_start();
 require('../php/clases/class.System.php');
+require('../hace.php');
 $db = new Conexion();
 $IdUsua = $_POST["IdUsua"];
 $IdReincorporacion = $_POST["IdReincorporacion"];
@@ -9,6 +10,7 @@ $sql6 = $db->query("SELECT * FROM tblc_usuario WHERE tblc_usuario.IdUsua = '$IdU
 $db->rows($sql6);
 $datos61 = $db->recorrer($sql6);
 $Nombre = $datos61["Usuario"] . ' - ' . $datos61["Nombre"] . ' ' . $datos61["APaterno"] . ' ' . $datos61["AMaterno"];
+$IdGrado = $datos61["Grado"];
 $IdO = $datos61["IdOferta"];
 $IdC = $datos61["IdCampus"];
 
@@ -53,10 +55,41 @@ WHERE
 tblc_rvoe.IdEducativa =  '$IdO'
 ");
 
+
+
+  $sql_cicloLimite = $db->query("SELECT * FROM tblc_ciclo WHERE tblc_ciclo.IdCiclo = '$rwIdCiclo'");
+  $db->rows($sql_cicloLimite);
+  $_cicloImpresion = $db->recorrer($sql_cicloLimite);
+
+
+  $mostrar = 1;
+  if($datos61['Grado'] <= 4){
+    if($_cicloImpresion['Limite'] <= date("Y-m-d")){
+      $mostrar = 0;
+    }
+  }
+
+
+
 ?>
 
 <form role="form">
   <div class="box-body">
+          <?php if($datos61['Grado'] <= 4){ ?>
+      <div class="col-md-12">
+      <blockquote>
+        <p style='color: blue;'><i class="fa fa-fw fa-info-circle"></i> Fecha límite para reincorporar el alumno al periodo escolar seleccionado es el:</p>
+        <small style='color: red;'><i class="fa fa-fw fa-calendar"></i> <?php echo obtenerFechaCorta($_cicloImpresion['Limite']); ?></small>
+      </blockquote>
+      </div><?php } ?>
+
+      <?php if($mostrar == 0){ ?>
+      <div class="col-md-12">
+      <blockquote>
+        <p style='color: red;'><i class="fa fa-fw fa-warning"></i> La fecha límite de reincorporación a caducado.</p>
+      </blockquote>
+      </div><?php } ?>
+
     <div class="form-group">
       <label>Periodo escolar en la que iniciará:</label>
       <select class="form-control select2" disabled style="width:100%" onchange="sel_ciclo_es(<?php echo $IdUsua; ?>)">
@@ -99,6 +132,7 @@ tblc_rvoe.IdEducativa =  '$IdO'
     </div>
 
   </div>
+  <?php if($mostrar == 1){ ?>
   <?php if (($dat_rei["IdEstatus"] == 3) && (isset($idMod[0]))) {  $p = 0; ?>
     <div class="box-footer">
       <?php if($datos61["_tipoReincorporacion"] == 'SI'){ 
@@ -163,13 +197,24 @@ tblc_rvoe.IdEducativa =  '$IdO'
         
         $p = 1;  ?>
         <button type="button" class="btn btn-block btn-success" > <i class="fa fa-fw fa-check-circle"></i> Pagos iniciales del alumno aplicado correctamente.</button>
+
+
+
+
       <?php } else { ?>
         <button type="button" class="btn btn-block btn-primary" onclick="sav_pagos_seguimi_reincor(<?php echo $IdUsua; ?>,<?php echo $IdReincorporacion; ?>,<?php echo $_SESSION['IdUsua']; ?>,<?php echo $IdCiclo; ?>)"> <i class="fa fa-fw fa-warning"></i> Aplicar pagos iniciales al alumno para su reincorporación</button>
       <?php } ?>
       <?php if($p == 1){ ?>
       <button type="button" class="btn btn-block btn-primary" onclick="sav_seguimi_reincor(<?php echo $IdUsua; ?>,<?php echo $IdReincorporacion; ?>,<?php echo $_SESSION['IdUsua']; ?>)"> <i class="fa fa-fw fa-warning"></i> Aceptar alumno para reincorporación</button>
       <?php } ?>
-    </div><?php  } ?>
+    </div>
+    <?php  } ?>
+    <?php  } ?>
+
+
+
+
+    
 </form>
 <script src="bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <script>

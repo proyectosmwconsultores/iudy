@@ -1,8 +1,9 @@
 <?php
 session_start();
 require('../../php/clases/class.System.php');
+require('../../hace.php');
 $db = new Conexion();
-
+$hoy = date("Y-m-d");
 $IdUsua = $_POST["IdUsua"];
 $idPeriodo = $_POST["idPeriodo"];
 $idCiclo = $_POST["idCiclo"];
@@ -49,7 +50,7 @@ if ($_tipoCiclo == 'C') {
   $_tipC = 'TRIMESTRE';
 }
 
-$sql_ciclo = $db->query("SELECT * FROM tblc_ciclo WHERE tblc_ciclo.Tipo = '$_tipC' AND tblc_ciclo._activo = '1' ");
+$sql_ciclo = $db->query("SELECT * FROM tblc_ciclo WHERE tblc_ciclo.Tipo = '$_tipC' AND tblc_ciclo.Limite >= '$hoy' ");
 
 $sql_mat = $db->query("SELECT tblp_asignacion.IdAsignacion, tblp_asignacion.IdModulo, tblp_modulo.CodeModulo, tblp_modulo.NombreMod, tblp_asignacion.IdEstatus FROM tblp_asignacion Left Join tblp_modulo ON tblp_modulo.IdModulo = tblp_asignacion.IdModulo WHERE tblp_asignacion.IdGrupo =  '$idGrupo' AND tblp_asignacion.Tipo =  '2' AND ((tblp_asignacion.IdEstatus = 12) || (tblp_asignacion.IdEstatus = 8)) ");
 $sql_recx = $db->query("SELECT
@@ -77,7 +78,7 @@ Left Join tblc_usuario ON tblc_usuario.IdUsua = tblp_asignacion.IdUsua
 Left Join tblp_modulo AS ModRvoe ON ModRvoe.IdModulo = tblp_moduloalumno._idModulo
 WHERE tblp_moduloalumno.IdUsua = '$IdUsua' AND tblp_moduloalumno.IdCiclo = '$idCiclo' AND tblp_moduloalumno.Activo = '1' AND tblp_asignacion.Tipo = '2'");
 
-$sql_cic_pers = $db->query("SELECT tblp_personalizado.IdHorario, tblp_personalizado.IdCiclo, tblc_ciclo.Ciclo FROM tblp_personalizado Left Join tblc_ciclo ON tblc_ciclo.IdCiclo = tblp_personalizado.IdCiclo WHERE tblp_personalizado.IdUsua =  '$IdUsua' ORDER BY tblc_ciclo.FInicio DESC LIMIT 3 "); 
+$sql_cic_pers = $db->query("SELECT tblp_personalizado.IdHorario, tblp_personalizado.IdCiclo, tblc_ciclo.Ciclo FROM tblp_personalizado Left Join tblc_ciclo ON tblc_ciclo.IdCiclo = tblp_personalizado.IdCiclo WHERE tblp_personalizado.IdUsua =  '$IdUsua' ORDER BY tblc_ciclo.FInicio DESC LIMIT 1 "); 
 
 $sql_grp_dispo = $db->query("SELECT tblc_ciclogrupo.IdCiclo, tblc_ciclogrupo.IdGrupo, tblc_ciclogrupo.Grado, tblp_grupo.CveGrupo, tblc_dias_clases._Dias, tblc_campus.Campus, tblp_educativa.Abreviatura
 FROM tblc_ciclogrupo
@@ -94,7 +95,7 @@ $sql_rvoe = $db->query("SELECT tblc_rvoe_campus.Id_rvoe, tblc_rvoe_campus.IdEduc
 ?>
 <div class="box box-info">
   <div class="box-header with-border">
-    <h3 class="box-title"><i class="fa fa-fw fa-book"></i> Configurar rvoe del plan de estudios a utilizar---</h3>
+    <h3 class="box-title"><i class="fa fa-fw fa-book"></i> Configurar rvoe del plan de estudios a utilizar:</h3>
   </div>
   <form class="form-horizontal">
     <div class="box-body">
@@ -129,7 +130,7 @@ $sql_rvoe = $db->query("SELECT tblc_rvoe_campus.Id_rvoe, tblc_rvoe_campus.IdEduc
           <select class="form-control" name="txt_periodo" id="txt_periodo" onchange="sel_periodo_escolar(<?php echo $IdUsua; ?>)">
             <option value=""> - Seleccione - </option>
             <?php while ($_cic = $db->recorrer($sql_ciclo)) { ?>
-              <option value="<?php echo $_cic["IdCiclo"]; ?>" <?php if ($_cic["IdCiclo"] == $idPeriodo) { ?>selected="selected" <?php } ?>> <?php echo $_cic["Ciclo"]; ?> </option>
+              <option value="<?php echo $_cic["IdCiclo"]; ?>" <?php if ($_cic["IdCiclo"] == $idPeriodo) { ?>selected="selected" <?php } ?>> <?php echo $_cic["Ciclo"]; ?> -  (Fecha límite de inscripción: <?php echo obtenerFechaCorta($_cic["Limite"]); ?>) </option>
             <?php } ?>
           </select>
         </div>
@@ -575,7 +576,7 @@ function iniciar_horario_personalizado_espe(IdUsua,idTipo) {
 
     var TipoGuardar = "ini_horario_personalizado";
     swal({
-        title: "\u00BFEst\u00E1 seguro que desea inicializar el horario personalizado de este alumno con este periodo escolar?",
+        title: "\u00BFEst\u00E1 seguro que desea inicializar la inscripción académica de este alumno con este periodo escolar?",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: '#DD6B55',
@@ -602,7 +603,7 @@ function iniciar_horario_personalizado_espe(IdUsua,idTipo) {
                 swal("Error al inicializar", "Este proceso no se pudo realizar favor de revisar.", "error");
               }
               if (data == 1) {
-                swal("Inicializado correctamente", "Usted ya puede comenzar a generar el horario personalizado.", "success");
+                swal("Inicializado correctamente", "Usted ya puede comenzar a generar la inscripción académica.", "success");
                 var idGrupo = 0;
                 var idModulo = 0;
                 var idCiclo = 0;

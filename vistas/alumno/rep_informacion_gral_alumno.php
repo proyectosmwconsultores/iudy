@@ -76,17 +76,13 @@ if ($alumno[0]['IdOferta'] == 30) {
 <p class="text-muted text-center" style="color: blue;"><?php if (isset($alumno[0]["Trayectoria"])) { echo "<i class='fa fa-fw fa-graduation-cap'></i> " . $alumno[0]["Trayectoria"]; } ?></p>
 
 
-
-
-
-
 <section class="pay-page">
   <div class="paytabs-card">
     <div class="paytabs-header">
       <div class="paytabs-title-area">
         <div class="paytabs-icon">📋</div>
         <div>
-          <div class="paytabs-title"><?php echo $alumno[0]["NomEducativa"]; ?> <b style="color: blue;"><?php if ($alumno[0]["Termino"] > 1) { if ($alumno[0]["Termino"] == '2') { echo "(CLINICA)"; } elseif ($alumno[0]["Termino"] == '3') { echo "(ORGANIZACIONAL)"; } elseif ($alumno[0]["Termino"] == '4') { echo "(EDUCATIVA)"; } } ?></div>
+          <div class="paytabs-title"><?php echo $alumno[0]["NomEducativa"]; ?> <b style="color: blue;"><?php if ($alumno[0]["Termino"] > 1) { if ($alumno[0]["Termino"] == '2') { echo "(CLINICA)"; } elseif ($alumno[0]["Termino"] == '3') { echo "(ORGANIZACIONAL)"; } elseif ($alumno[0]["Termino"] == '4') { echo "(EDUCATIVA)"; } } ?></b></div>
           <div class="paytabs-sub"><?php echo $alumno[0]["Campus"]; ?></div>
         </div>
       </div>
@@ -118,8 +114,8 @@ if ($alumno[0]['IdOferta'] == 30) {
       </div>
     </div>
   </div>
-  <hr>
-  <div class="paytabs-card">
+  
+  <div class="paytabs-card" style="margin-top: 15px;">
     <div class="paytabs-header">
       <div class="paytabs-title-area">
         <div class="paytabs-icon">📋</div>
@@ -168,9 +164,9 @@ if ($alumno[0]['IdOferta'] == 30) {
       </div>
     </div>
   </div>
-  <hr>
+  
 
-  <div class="paytabs-card">
+  <div class="paytabs-card" style="margin-top: 15px;">
     <div class="paytabs-header">
       <div class="paytabs-title-area">
         <div class="paytabs-icon">📋</div>
