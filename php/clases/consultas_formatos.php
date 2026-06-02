@@ -34,7 +34,9 @@ class Class_formatos {
 	tblc_alumnos.IdUsua, 
 	tblc_alumnos.IdCiclo, 
 	tblc_ciclo.Ciclo, 
-	tblp_grupo.Dia
+	tblp_grupo.Dia, 
+	tblc_estatus.Estatus, 
+	tblc_alumnos.Tipo
 FROM
 	tblc_alumnos
 	LEFT JOIN
@@ -45,10 +47,14 @@ FROM
 	tblp_grupo
 	ON 
 		tblc_alumnos.IdGrupo = tblp_grupo.IdGrupo
+	LEFT JOIN
+	tblc_estatus
+	ON 
+		tblc_alumnos.IdEstatus = tblc_estatus.IdEstatus
 WHERE
 	tblc_alumnos.IdUsua = '$IdAlumno'
 ORDER BY
-	tblc_alumnos.Grado DESC");
+	tblc_ciclo.FInicio DESC");
     while($x = $db->recorrer($sql)){
       $get_mis_grados_estudiados[] = $x;
     }
@@ -935,10 +941,10 @@ tblp_foliospago.NoFolio
     $rwTipo = $datos81["_tipoReincorporacion"];
     $rwUsuario = $datos81["Usuario"];
     if($rwIdE == 8){
-      $sql7 = $db->query("SELECT tblc_ciclogrupo.IdCicloGrupo, tblc_ciclogrupo.Grado FROM tblc_ciclogrupo WHERE tblc_ciclogrupo.IdGrupo =  '$rwIdG' ORDER BY tblc_ciclogrupo.Grado DESC");
-      $db->rows($sql7);
-      $datos_7 = $db->recorrer($sql7);
-      $rwSemCua = $datos_7["Grado"];
+      // $sql7 = $db->query("SELECT tblc_ciclogrupo.IdCicloGrupo, tblc_ciclogrupo.Grado FROM tblc_ciclogrupo WHERE tblc_ciclogrupo.IdGrupo =  '$rwIdG' ORDER BY tblc_ciclogrupo.Grado DESC");
+      // $db->rows($sql7);
+      // $datos_7 = $db->recorrer($sql7);
+      // $rwSemCua = $datos_7["Grado"];
      // $insertar = $db->query("UPDATE tblc_usuario SET tblc_usuario.SemCua = '$rwSemCua' WHERE tblc_usuario.IdUsua= '$IdUsua' ");
     }
 
@@ -947,27 +953,30 @@ tblp_foliospago.NoFolio
       $sql7 = $db->query("SELECT tblc_ciclogrupo.IdCicloGrupo, tblc_ciclogrupo.Grado, tblc_ciclo.Tipo, tblc_ciclo.Numero FROM tblc_ciclogrupo Left Join tblc_ciclo ON tblc_ciclo.IdCiclo = tblc_ciclogrupo.IdCiclo WHERE tblc_ciclogrupo.IdCiclo = '$rwCicF' AND tblc_ciclogrupo.IdGrupo =  '$rwIdG' ");
       $db->rows($sql7);
       $datos_7 = $db->recorrer($sql7);
-      $rwSemCua = $datos_7["Grado"];
-      $rwTipo = $datos_7["Tipo"];
-      $rwNumero = $datos_7["Numero"];
-      $insertar = $db->query("UPDATE tblc_usuario SET tblc_usuario.SemCua = '$rwSemCua' WHERE tblc_usuario.IdUsua= '$IdUsua' ");
+      if(isset($datos_7["Grado"])){
+        $rwSemCua = $datos_7["Grado"];
+        $rwTipo = $datos_7["Tipo"];
+        $rwNumero = $datos_7["Numero"];
+        $insertar = $db->query("UPDATE tblc_usuario SET tblc_usuario.SemCua = '$rwSemCua' WHERE tblc_usuario.IdUsua= '$IdUsua' ");
 
-      $sql_c = $db->query("SELECT tblc_ciclo.IdCiclo, tblc_ciclo.Ciclo FROM tblc_ciclo WHERE tblc_ciclo.Tipo =  '$rwTipo' AND tblc_ciclo.Numero >  '$rwNumero' ORDER BY tblc_ciclo.Numero ASC ");
-      $db->rows($sql_c);
-      $datos_cicx = $db->recorrer($sql_c);
-      $IdCiclo = $datos_cicx["IdCiclo"];
-      if($IdCiclo){
-        $sql_asig = $db->query("SELECT tblp_asignacion.IdAsignacion FROM tblp_asignacion WHERE tblp_asignacion.Tipo =  '2' AND tblp_asignacion.IdCiclo =  '$IdCiclo' AND tblp_asignacion.IdGrupo =  '$rwIdG' ");
-        while($y = $db->recorrer($sql_asig)){
+        $sql_c = $db->query("SELECT tblc_ciclo.IdCiclo, tblc_ciclo.Ciclo FROM tblc_ciclo WHERE tblc_ciclo.Tipo =  '$rwTipo' AND tblc_ciclo.Numero >  '$rwNumero' ORDER BY tblc_ciclo.Numero ASC ");
+        $db->rows($sql_c);
+        $datos_cicx = $db->recorrer($sql_c);
+        $IdCiclo = $datos_cicx["IdCiclo"];
+        if($IdCiclo){
+          $sql_asig = $db->query("SELECT tblp_asignacion.IdAsignacion FROM tblp_asignacion WHERE tblp_asignacion.Tipo =  '2' AND tblp_asignacion.IdCiclo =  '$IdCiclo' AND tblp_asignacion.IdGrupo =  '$rwIdG' ");
+          while($y = $db->recorrer($sql_asig)){
 
-        $insertar = $db->query("DELETE FROM tblp_calificacion WHERE tblp_calificacion.IdAsignacion = '".$y['IdAsignacion']."' AND tblp_calificacion.IdUsua = '$IdUsua'");
-        $insertar = $db->query("DELETE FROM tblp_moduloalumno WHERE tblp_moduloalumno.IdAsignacion = '".$y['IdAsignacion']."' AND tblp_moduloalumno.IdUsua = '$IdUsua'");
-        $insertar = $db->query("DELETE FROM tblp_asistencia WHERE tblp_asistencia.IdAsignacion = '".$y['IdAsignacion']."' AND tblp_asistencia.IdUsua = '$IdUsua'");
+          $insertar = $db->query("DELETE FROM tblp_calificacion WHERE tblp_calificacion.IdAsignacion = '".$y['IdAsignacion']."' AND tblp_calificacion.IdUsua = '$IdUsua'");
+          $insertar = $db->query("DELETE FROM tblp_moduloalumno WHERE tblp_moduloalumno.IdAsignacion = '".$y['IdAsignacion']."' AND tblp_moduloalumno.IdUsua = '$IdUsua'");
+          $insertar = $db->query("DELETE FROM tblp_asistencia WHERE tblp_asistencia.IdAsignacion = '".$y['IdAsignacion']."' AND tblp_asistencia.IdUsua = '$IdUsua'");
+          }
+
+          $insertar = $db->query("DELETE FROM tblp_pagos WHERE tblp_pagos.IdUsua = '$IdUsua' AND tblp_pagos.IdCiclo = '$IdCiclo' AND ((tblp_pagos.IdEstatus = 1) || (tblp_pagos.IdEstatus = 58)) ");
+          $insertar = $db->query("DELETE FROM tblc_alumnos WHERE tblc_alumnos.IdUsua = '$IdUsua' AND tblc_alumnos.IdCiclo = '$IdCiclo' ");
         }
-
-        $insertar = $db->query("DELETE FROM tblp_pagos WHERE tblp_pagos.IdUsua = '$IdUsua' AND tblp_pagos.IdCiclo = '$IdCiclo' AND ((tblp_pagos.IdEstatus = 1) || (tblp_pagos.IdEstatus = 58)) ");
-        $insertar = $db->query("DELETE FROM tblc_alumnos WHERE tblc_alumnos.IdUsua = '$IdUsua' AND tblc_alumnos.IdCiclo = '$IdCiclo' ");
       }
+      
     }
 
   $get_cal_all_us = [];

@@ -29,17 +29,17 @@ $_anio = date("Y");
 $_hoy = date("Y-m-d");
 $_hoy = date("Y-m-d",strtotime($_hoy."- 12 month"));
 
-// $sql1 = $db->query("SELECT tblc_alumnos.IdActivo, tblc_alumnos.IdCiclo, tblc_ciclo.Ciclo FROM tblc_alumnos Left Join tblc_ciclo ON tblc_ciclo.IdCiclo = tblc_alumnos.IdCiclo WHERE tblc_alumnos.IdUsua =  '$IdUsua' ORDER BY tblc_ciclo.FInicio DESC LIMIT 3");
-$sql1 = $db->query("SELECT
-tblc_ciclo.IdCiclo,
-tblc_ciclo.Ciclo
-FROM
-tblc_ciclo
-WHERE
-tblc_ciclo.Tipo =  '$tipoc' AND tblc_ciclo.FInicio >= '$_hoy'
-ORDER BY
-tblc_ciclo.FInicio ASC LIMIT 5
-");
+$sql1 = $db->query("SELECT tblc_alumnos.IdActivo, tblc_alumnos.IdCiclo, tblc_ciclo.Ciclo FROM tblc_alumnos Left Join tblc_ciclo ON tblc_ciclo.IdCiclo = tblc_alumnos.IdCiclo WHERE tblc_alumnos.IdUsua =  '$IdUsua' ORDER BY tblc_ciclo.FInicio DESC LIMIT 3");
+// $sql1 = $db->query("SELECT
+// tblc_ciclo.IdCiclo,
+// tblc_ciclo.Ciclo
+// FROM
+// tblc_ciclo
+// WHERE
+// tblc_ciclo.Tipo =  '$tipoc' AND tblc_ciclo.FInicio >= '$_hoy'
+// ORDER BY
+// tblc_ciclo.FInicio ASC LIMIT 5
+// ");
 
 $sql2 = $db->query("SELECT tblh_bajausuario.IdBaja, tblh_bajausuario.Comentario, tblh_bajausuario.IdEstatus, tblh_bajausuario.FecCap, tblc_ciclo.Ciclo, tblc_estatus.Estatus FROM tblh_bajausuario Left Join tblc_ciclo ON tblc_ciclo.IdCiclo = tblh_bajausuario.IdCiclo Left Join tblc_estatus ON tblc_estatus.IdEstatus = tblh_bajausuario.IdEstatus WHERE tblh_bajausuario.IdUsua = '$IdUsua' ORDER BY tblh_bajausuario.FecCap DESC ");
 

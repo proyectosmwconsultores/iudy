@@ -183,7 +183,8 @@ if ($alumno[0]['IdOferta'] == 30) {
             <tr>
               <th></th>
               <th style="text-align: center;">Grado</th>
-              <th style="text-align: center;">Alumno</th>
+              <th>Inscripción</th>
+              <th>Estatus</th>
               <th>Periodo escolar</th>
             </tr>
           </thead>
@@ -197,6 +198,8 @@ if ($alumno[0]['IdOferta'] == 30) {
                   </div>
                 </td>
                 <td class="docs-td-strong" style="text-align: center;"><?php if ($misGrados[$i]["Dia"] == 'P') { echo "-"; } else { echo $misGrados[$i]["Grado"] . '°'; } ?></td>
+                <td class="docs-td-muted"><?php if($misGrados[$i]["Tipo"] == "R"){ echo "REGULAR"; } else { echo "REINCORPORACIÓN"; } ?></td>
+                <td class="docs-td-muted"><?php echo $misGrados[$i]["Estatus"]; ?></td>
                 <td class="docs-td-muted"><?php echo $misGrados[$i]["Ciclo"]; ?></td>
               </tr><?php } ?>
           </tbody>
