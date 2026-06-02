@@ -78,7 +78,8 @@ Left Join tblc_usuario ON tblc_usuario.IdUsua = tblp_asignacion.IdUsua
 Left Join tblp_modulo AS ModRvoe ON ModRvoe.IdModulo = tblp_moduloalumno._idModulo
 WHERE tblp_moduloalumno.IdUsua = '$IdUsua' AND tblp_moduloalumno.IdCiclo = '$idCiclo' AND tblp_moduloalumno.Activo = '1' AND tblp_asignacion.Tipo = '2'");
 
-$sql_cic_pers = $db->query("SELECT tblp_personalizado.IdHorario, tblp_personalizado.IdCiclo, tblc_ciclo.Ciclo FROM tblp_personalizado Left Join tblc_ciclo ON tblc_ciclo.IdCiclo = tblp_personalizado.IdCiclo WHERE tblp_personalizado.IdUsua =  '$IdUsua' ORDER BY tblc_ciclo.FInicio DESC LIMIT 1 "); 
+// $sql_cic_pers = $db->query("SELECT tblp_personalizado.IdHorario, tblp_personalizado.IdCiclo, tblc_ciclo.Ciclo FROM tblp_personalizado Left Join tblc_ciclo ON tblc_ciclo.IdCiclo = tblp_personalizado.IdCiclo WHERE tblp_personalizado.IdUsua =  '$IdUsua' ORDER BY tblc_ciclo.FInicio DESC LIMIT 1 "); 
+$sql_cic_pers = $db->query("SELECT tblc_alumnos.IdCiclo,  tblc_ciclo.Ciclo FROM tblc_alumnos LEFT JOIN tblc_ciclo ON tblc_alumnos.IdCiclo = tblc_ciclo.IdCiclo WHERE tblc_alumnos.IdUsua = '$IdUsua' ORDER BY tblc_ciclo.FInicio DESC LIMIT 1"); 
 
 $sql_grp_dispo = $db->query("SELECT tblc_ciclogrupo.IdCiclo, tblc_ciclogrupo.IdGrupo, tblc_ciclogrupo.Grado, tblp_grupo.CveGrupo, tblc_dias_clases._Dias, tblc_campus.Campus, tblp_educativa.Abreviatura
 FROM tblc_ciclogrupo

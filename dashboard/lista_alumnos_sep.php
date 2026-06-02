@@ -727,7 +727,7 @@ $totalOfertasActivos = count($concentradoOfertaActivos);
 
                 <td>
                   <div class="student-name">
-                    <?php echo $matx["Usuario"];?> - <?php echo !empty($alumno) ? h($alumno) : "Sin nombre"; ?>
+                    <?php echo $matx["IdUsua"];?>- <?php echo $matx["Usuario"];?> - <?php echo !empty($alumno) ? h($alumno) : "Sin nombre"; ?>
                   </div>
                   <div class="student-small">
                     Grupo: <?php echo h($grupo); ?> / 

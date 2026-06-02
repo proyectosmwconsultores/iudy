@@ -183,11 +183,13 @@ if ($alumno[0]['IdOferta'] == 30) {
             <tr>
               <th></th>
               <th style="text-align: center;">Grado</th>
+              <th style="text-align: center;">Alumno</th>
               <th>Periodo escolar</th>
             </tr>
           </thead>
           <tbody>
-            <?php for ($i = 0; $i < sizeof($misGrados); $i++) { ?>
+            <?php for ($i = 0; $i < sizeof($misGrados); $i++) {
+              ?>
               <tr>
                 <td class="docs-td-strong">
                   <div class="pay-actions" style="cursor: pointer;">

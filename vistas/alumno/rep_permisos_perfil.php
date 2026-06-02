@@ -97,7 +97,7 @@ if(($alumno[0]['IdEstatus'] == 61) || ($alumno[0]['IdEstatus'] == 62) || ($alumn
     <?php } ?>
     
     <?php if ((isset($_mod60[0])) && ($alumno[0]['IdEstatus'] == 8) && ($disx == 2)) { ?>
-      <a style="text-align: left;" onclick="horario_personalizado_especial(<?php echo $IdUsua; ?>)" href="javascript:void(0);" class="btn btn-warning btn-block"><i class="fa fa-briefcase"></i> Inscripción académica </a>
+      <a style="text-align: left;" onclick="horario_personalizado_especial(<?php echo $IdUsua; ?>)" href="javascript:void(0);" class="btn btn-warning btn-block"><i class="fa fa-briefcase"></i> Materia personalizada </a>
     <?php } ?>
     <?php if ((isset($_mod63[0])) && ($alumno[0]['IdEstatus'] == 8) && ($disx == 1)) { ?>
       <a style="text-align: left;" onclick="configurar_curso(<?php echo $IdUsua; ?>)" href="javascript:void(0);" class="btn btn-primary btn-block"><i class="fa fa-briefcase"></i> Cursos, diplomados</a>
